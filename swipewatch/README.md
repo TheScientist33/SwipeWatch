@@ -1,16 +1,23 @@
-# swipewatch
+# SwipeWatch 🎬📱  
 
-A new Flutter project.
+SwipeWatch est une application mobile Flutter qui permet de découvrir, trier et noter des films en utilisant une mécanique de swipe inspirée de **Tinder** et **Anki**.  
 
-## Getting Started
+## 📌 Fonctionnalités principales  
 
-This project is a starting point for a Flutter application.
+✅ **Swipe intuitif** :  
+- 🔹 **Swipe droite** → Like ("Avec mention")  
+- 🔹 **Swipe gauche** → Dislike ("Recalé !")  
+- 🔹 **Swipe haut** → Superlike ("Félicitations du jury 🎉")  
+- 🔹 **Swipe bas** → Ajout dans une liste personnalisée  
 
-A few resources to get you started if this is your first Flutter project:
+✅ **Fiches détaillées** :  
+- 🎞️ Affiche du film  
+- 🎭 Acteurs, réalisateur, synopsis  
+- 🔗 Lien vers les plateformes de streaming  
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+✅ **Système de recommandations** :  
+- 📊 IA basée sur les préférences utilisateur  
+- 🏆 Listes préenregistrées (Oscars, César, Top Allociné...)  
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+✅ **Connexion API JustWatch** :  
+- 🔍 Recherche et disponibilité des films
