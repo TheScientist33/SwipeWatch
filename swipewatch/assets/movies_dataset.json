@@ -1,0 +1,401 @@
+[
+    {
+    "adult": false,
+    "backdrop_path": "/kylozAI9Rf1pp7pZ8nFPK4s1s5n.jpg",
+    "genre_ids": [
+        28,
+        12,
+        14,
+        16
+    ],
+    "id": 1357633,
+    "original_language": "ja",
+    "original_title": "俺だけレベルアップな件 -ReAwakening-",
+    "overview": "Plus d’une décennie s’est écoulée depuis l’apparition soudaine d’étranges portails reliant notre monde à une autre dimension. Depuis, certains humains se sont découverts des pouvoirs surnaturels. On appelle ces individus des chasseurs. Ils gagnent leur vie en utilisant leurs pouvoirs pour conquérir des donjons à l’intérieur de ces portails. Parmi ces valeureux chasseurs, Jinwoo Sung, toutefois connu pour être \"le plus faible de toute l’humanité\". Un jour, Jinwoo est mortellement blessé lorsqu’il tombe par hasard sur un double donjon caché. Miraculeusement rescapé et au bord de la mort, Jinwoo entrevoit une quête et saisit une opportunité qui lui permet dès lors de gagner en puissance très rapidement…",
+    "popularity": 930.553,
+    "poster_path": "/dv6OBYGvSE9qI9RjpNUvHzdvAT5.jpg",
+    "release_date": "2024-11-26",
+    "title": "Solo Leveling -ReAwakening-",
+    "video": false,
+    "vote_average": 7.0,
+    "vote_count": 72
+},
+    {
+        "adult": false,
+        "backdrop_path": "/zOpe0eHsq0A2NvNyBbtT6sj53qV.jpg",
+        "genre_ids": [
+            28,
+            878,
+            35,
+            10751
+        ],
+        "id": 939243,
+        "original_language": "en",
+        "original_title": "Sonic the Hedgehog 3",
+        "overview": "Sonic, Knuckles et Tails sont à nouveau réunis face à un puissant nouvel adversaire, Shadow, un mystérieux vilain doté de pouvoirs comme ils n'en ont encore jamais vu. Leurs habiletés étant toutes surclassées, l'Équipe Sonic doit tenter une alliance improbable dans l'espoir d'arrêter Shadow et de protéger la planète.",
+        "popularity": 2525.912,
+        "poster_path": "/gERwLGTa6JGN4qXjkip13eDaxy1.jpg",
+        "release_date": "2024-12-19",
+        "title": "Sonic 3, le film",
+        "video": false,
+        "vote_average": 7.586,
+        "vote_count": 602
+    },
+    {
+        "adult": false,
+        "backdrop_path": "/oHPoF0Gzu8xwK4CtdXDaWdcuZxZ.jpg",
+        "genre_ids": [
+            12,
+            10751,
+            16
+        ],
+        "id": 762509,
+        "original_language": "en",
+        "original_title": "Mufasa: The Lion King",
+        "overview": "Rafiki raconte à la jeune lionne Kiara - fille de Simba et Nala - la légende de Mufasa. Il est épaulé par Timon et Pumbaa, célèbres pour leurs répliques percutantes. Présentée sous forme de flashbacks, l'histoire de Mufasa retrace le parcours d’un lionceau orphelin, seul et désemparé, qui croise un jour la route du sympathique Taka, héritier d’une lignée royale. Cette rencontre inattendue devient le point de départ d’un voyage jalonné de péripéties pour un petit groupe « d’indésirables » formé autour d’eux, désormais en quête de son destin. Leur amitié sera mise à rude épreuve lorsqu’ils devront s’unir pour affronter un adversaire aussi menaçant que redoutable…",
+        "popularity": 2393.715,
+        "poster_path": "/67BPUqGcMK4iG97JNNX4GE0sDwo.jpg",
+        "release_date": "2024-12-18",
+        "title": "Mufasa : Le Roi Lion",
+        "video": false,
+        "vote_average": 7.4,
+        "vote_count": 691
+    },
+    {
+        "adult": false,
+        "backdrop_path": "/euYIwmwkmz95mnXvufEmbL6ovhZ.jpg",
+        "genre_ids": [
+            28,
+            12,
+            18
+        ],
+        "id": 558449,
+        "original_language": "en",
+        "original_title": "Gladiator II",
+        "overview": "Des années après avoir assisté à la mort du héros vénéré Maximus aux mains de son oncle, Lucius est forcé d'entrer dans le Colisée lorsque son pays est conquis par les empereurs tyranniques qui gouvernent désormais Rome d'une main de fer. La rage au cœur et l'avenir de l'Empire en jeu, Lucius doit se tourner vers son passé pour trouver la force et l'honneur de rendre la gloire de Rome à son peuple.",
+        "popularity": 1720.821,
+        "poster_path": "/7R1EXkBAKunoG0UhZToFrnlStcp.jpg",
+        "release_date": "2024-11-05",
+        "title": "Gladiator II",
+        "video": false,
+        "vote_average": 6.751,
+        "vote_count": 2349
+    },
+    {
+        "adult": false,
+        "backdrop_path": "/vZG7PrX9HmdgL5qfZRjhJsFYEIA.jpg",
+        "genre_ids": [
+            28,
+            878,
+            12
+        ],
+        "id": 912649,
+        "original_language": "en",
+        "original_title": "Venom: The Last Dance",
+        "overview": "Eddie et Venom sont en cavale. Chacun est traqué par ses semblables et alors que l'étau se resserre, le duo doit prendre une décision dévastatrice qui annonce la conclusion des aventures d'Eddie et de Venom.",
+        "popularity": 1694.909,
+        "poster_path": "/c2KKN61jRS5bBcUX1zQa8BoZcHm.jpg",
+        "release_date": "2024-10-22",
+        "title": "Venom : The Last Dance",
+        "video": false,
+        "vote_average": 6.81,
+        "vote_count": 2376
+    },
+    {
+        "adult": false,
+        "backdrop_path": "/vYqt6kb4lcF8wwqsMMaULkP9OEn.jpg",
+        "genre_ids": [
+            16,
+            12,
+            10751,
+            35
+        ],
+        "id": 1241982,
+        "original_language": "en",
+        "original_title": "Moana 2",
+        "overview": "Après avoir reçu une invitation inattendue de ses ancêtres, Vaiana entreprend un périple qui la conduira jusqu’aux eaux dangereuses situées aux confins des mers des îles du Pacifique. Elle y vivra des péripéties comme jamais vécues auparavant.",
+        "popularity": 1432.939,
+        "poster_path": "/f4voSsbPTvaQwicwd1dyxICow6c.jpg",
+        "release_date": "2024-11-21",
+        "title": "Vaiana 2",
+        "video": false,
+        "vote_average": 7.005,
+        "vote_count": 852
+    },
+    {
+        "adult": false,
+        "backdrop_path": "/3WnoZw50qIfXsFnKr0LddEh5Jnf.jpg",
+        "genre_ids": [
+            10752,
+            36,
+            18
+        ],
+        "id": 1222248,
+        "original_language": "no",
+        "original_title": "Nr. 24",
+        "overview": "À l'aube de la Seconde Guerre mondiale, la détermination d'un jeune Norvégien à résister aux nazis change la donne pour son avenir et celui de son pays.",
+        "popularity": 1373.294,
+        "poster_path": "/fepgcKaWyECivTItjdGM205MP5y.jpg",
+        "release_date": "2024-10-30",
+        "title": "Numéro 24",
+        "video": false,
+        "vote_average": 7.387,
+        "vote_count": 119
+    },
+    {
+        "adult": false,
+        "backdrop_path": "/uKb22E0nlzr914bA9KyA5CVCOlV.jpg",
+        "genre_ids": [
+            18,
+            10749,
+            14
+        ],
+        "id": 402431,
+        "original_language": "en",
+        "original_title": "Wicked",
+        "overview": "Elphaba, une jeune femme incomprise à cause de sa peau verte inhabituelle, doit encore découvrir son véritable pouvoir. Glinda, une jeune femme populaire, dorée par le privilège et l'ambition, doit encore découvrir son véritable cœur. Les deux se rencontrent en tant qu'étudiantes à l'Université de Shiz dans le fantastique Pays d'Oz et forgent une amitié improbable, mais profonde.",
+        "popularity": 1270.61,
+        "poster_path": "/kQkgPhj6sCuoMWzPKWQVOWUXzib.jpg",
+        "release_date": "2024-11-20",
+        "title": "Wicked",
+        "video": false,
+        "vote_average": 7.119,
+        "vote_count": 1303
+    },
+    {
+        "adult": false,
+        "backdrop_path": "/iFsWkmAcu1QcMJ2LhqN8bU0Oj7.jpg",
+        "genre_ids": [
+            28,
+            12,
+            53
+        ],
+        "id": 539972,
+        "original_language": "en",
+        "original_title": "Kraven the Hunter",
+        "overview": "Lors d'un safari avec son père Nikolai, un oligarque russe dont la cruauté a jadis poussé sa mère au suicide, Sergei Kravinoff est attaqué par un lion, qui vient très près de le tuer. La potion miraculeuse de Calypso, une prêtresse vaudou, permet non seulement au garçon de survivre ; elle lui confère aussi une force surhumaine et un nouvel objectif : protéger la nature des braconniers et des criminels de toutes sortes. Élevé au titre de \"chasseur\", ses faits d’armes attirent rapidement l’attention d’un assassin redoutable, dont les pouvoirs sont comparables aux siens : le Rhino.",
+        "popularity": 1682.267,
+        "poster_path": "/2f7RCPno3tu1jN1ucQr3NfwQxAm.jpg",
+        "release_date": "2024-12-11",
+        "title": "Kraven the Hunter",
+        "video": false,
+        "vote_average": 6.221,
+        "vote_count": 448
+    },
+    {
+        "adult": false,
+        "backdrop_path": "/fzjH7kt1017R9EckLDmWmH5pGhD.jpg",
+        "genre_ids": [
+            28,
+            27,
+            53
+        ],
+        "id": 970450,
+        "original_language": "en",
+        "original_title": "Werewolves",
+        "overview": "Pendant une superlune, un phénomène inexpliqué bouleverse la planète entière. Plus d'un milliard de personnes se transforment en loups-garous gigantesques et agressifs. L'événement cause la mort de nombreuses victimes. Un an plus tard, à l'approche d'une phase lunaire similaire, la population, les autorités et la communauté scientifique se préparent au pire.",
+        "popularity": 1096.46,
+        "poster_path": "/mgMhRM3aNTxrFArPaDxWA4gxiNX.jpg",
+        "release_date": "2024-12-04",
+        "title": "Werewolves",
+        "video": false,
+        "vote_average": 6.5,
+        "vote_count": 189
+    },
+    {
+        "adult": false,
+        "backdrop_path": "/cjEcqdRdPQJhYre3HUAc5538Gk8.jpg",
+        "genre_ids": [
+            28,
+            14,
+            35
+        ],
+        "id": 845781,
+        "original_language": "en",
+        "original_title": "Red One",
+        "overview": "Après l'enlèvement du Père Noël, le chef de la sécurité du pôle Nord doit faire équipe avec le chasseur de primes le plus célèbre du monde dans une mission pleine d'action à travers le monde pour sauver Noël.",
+        "popularity": 972.76,
+        "poster_path": "/4nYSXdxjBwzVZUv1X9YnTQ9ZEhM.jpg",
+        "release_date": "2024-10-31",
+        "title": "Red One",
+        "video": false,
+        "vote_average": 7.1,
+        "vote_count": 2039
+    },
+    {
+        "adult": false,
+        "backdrop_path": "/ie8OSgIHEl6yQiGJ90dsyBWOpQA.jpg",
+        "genre_ids": [
+            16,
+            14,
+            28,
+            12
+        ],
+        "id": 839033,
+        "original_language": "en",
+        "original_title": "The Lord of the Rings: The War of the Rohirrim",
+        "overview": "Se déroulant 183 ans avant les événements de la trilogie de films originale, \"Le Seigneur des Anneaux : La Guerre des Rohirrim\" raconte le destin de la maison de Helm Mainmarteau, le roi légendaire du Rohan. Après une attaque-surprise menée par Wulf, un impitoyable et rusé seigneur Dunlending souhaitant venger la mort de son père, Helm et son peuple doivent se défendre dans une ultime bataille en se réfugiant dans l'ancienne forteresse de Fort-le-Cor, connue plus tard sous le nom de gouffre de Helm. Se trouvant dans une situation de plus en plus désespérée, Héra, fille de Helm, devra faire preuve de courage pour mener la résistance face à un ennemi redoutable déterminé à les anéantir.",
+        "popularity": 1049.714,
+        "poster_path": "/bcDGIZKQ959tnMn0qLl6GxOkbO3.jpg",
+        "release_date": "2024-12-05",
+        "title": "Le Seigneur des Anneaux : La Guerre des Rohirrim",
+        "video": false,
+        "vote_average": 6.516,
+        "vote_count": 317
+    },
+    {
+        "adult": false,
+        "backdrop_path": "/k24eZq5I3jyz4htPkZCRpnUmBzE.jpg",
+        "genre_ids": [
+            10749,
+            18
+        ],
+        "id": 1156593,
+        "original_language": "es",
+        "original_title": "Culpa tuya",
+        "overview": "La relation entre Noah et Nick semble plus forte que jamais, malgré la volonté de leurs parents de les séparer. Mais avec son travail et son entrée à la fac, de nouvelles perspectives amoureuses feront trembler les fondations de leur relation et celles des Leister. Si tout le monde est prêt à détruire une relation, aura-t-on droit à une fin heureuse ?",
+        "popularity": 1035.271,
+        "poster_path": "/bn4qZZO5nSN48D5pXVypf4MF2wg.jpg",
+        "release_date": "2024-12-26",
+        "title": "À contre-sens 2",
+        "video": false,
+        "vote_average": 7.1,
+        "vote_count": 866
+    },
+    {
+        "adult": false,
+        "backdrop_path": "/au3o84ub27qTZiMiEc9UYzN74V3.jpg",
+        "genre_ids": [
+            28,
+            878,
+            53
+        ],
+        "id": 1035048,
+        "original_language": "en",
+        "original_title": "Elevation",
+        "overview": "Les survivants d’une invasion extra-terrestre mortelle par des créatures monstrueuses vivent une existence primitive dans les hauteurs des Montagnes Rocheuses postapocalyptiques. C’est le seul endroit où ils sont saufs, les monstres ne montent pas au-delà de 2500 mètres d’altitude pour une raison inexpliquée. Lorsqu’un père découvre qu’il ne reste que très peu des médicaments dont son fils a besoin, il doit quitter les montagnes et leur sécurité pour trouver un nouveau stock avant que son fils ne meure. Deux femmes courageuses l’accompagnent dans cette mission dangereuse en basse altitude.",
+        "popularity": 808.58,
+        "poster_path": "/tnfc0NJ3BzhJrGJhkkEd6MHBdq5.jpg",
+        "release_date": "2024-11-07",
+        "title": "Elevation",
+        "video": false,
+        "vote_average": 6.245,
+        "vote_count": 333
+    },
+    {
+        "adult": false,
+        "backdrop_path": "/dWkdmxIkH9y23s9v1PjQFhTGIwo.jpg",
+        "genre_ids": [
+            28,
+            18,
+            53
+        ],
+        "id": 1043905,
+        "original_language": "en",
+        "original_title": "Dirty Angels",
+        "overview": "Lorsque des étudiantes sont prises en otage en Afghanistan, Jake, une combattante des forces spéciales américaines, rejoint un commando composé uniquement de femmes pour les libérer. Le plan : gagner la confiance des terroristes en se faisant passer pour les membres d’une organisation humanitaire. Mais les fantômes du passé de Jake la trahissent et mettent en péril le succès de cette mission sans retour.",
+        "popularity": 740.205,
+        "poster_path": "/1YljOSK0GdJXkdztOaSAh4qx5nG.jpg",
+        "release_date": "2024-12-11",
+        "title": "Dirty Angels",
+        "video": false,
+        "vote_average": 6.4,
+        "vote_count": 131
+    },
+    {
+        "adult": false,
+        "backdrop_path": "/bx6LoGl8L3hwgOCoD2H8JgIu7uC.jpg",
+        "genre_ids": [
+            28,
+            18
+        ],
+        "id": 1235623,
+        "original_language": "zh",
+        "original_title": "目中无人 2",
+        "overview": "Cheng Xia Zi, un épéiste aveugle doué pour les arts martiaux, sauve accidentellement Zhang Xiao Yu, qui a souffert de la destruction de sa famille. Sous la persuasion de l'orphelin Xiao Yu, Cheng Xia Zi le garde à contrecœur à ses côtés et lui enseigne des techniques. Xiao Yu attend également l'occasion de se venger.",
+        "popularity": 647.826,
+        "poster_path": "/isVAfZn5orLcUwoI1IUWPMWHmPV.jpg",
+        "release_date": "2024-07-21",
+        "title": "Eye for an Eye 2",
+        "video": false,
+        "vote_average": 7.0,
+        "vote_count": 8
+    },
+    {
+        "adult": false,
+        "backdrop_path": "/7h6TqPB3ESmjuVbxCxAeB1c9OB1.jpg",
+        "genre_ids": [
+            27,
+            878
+        ],
+        "id": 933260,
+        "original_language": "en",
+        "original_title": "The Substance",
+        "overview": "Elisabeth Sparkle, vedette d’une émission d’aérobic, est licenciée le jour de ses 50 ans à cause de son âge. Le moral au plus bas, elle reçoit une proposition inattendue, celle d'un mystérieux laboratoire lui proposant une « substance » miraculeuse : si elle se l’injecte, elle deviendra la meilleure version d’elle-même, plus jeune, plus belle, plus parfaite grâce à une modification de son ADN...",
+        "popularity": 727.215,
+        "poster_path": "/5Jfj6LqxOludXg454Vxef8dCJln.jpg",
+        "release_date": "2024-09-07",
+        "title": "The Substance",
+        "video": false,
+        "vote_average": 7.126,
+        "vote_count": 3276
+    },
+    {
+        "adult": false,
+        "backdrop_path": "/b3mdmjYTEL70j7nuXATUAD9qgu4.jpg",
+        "genre_ids": [
+            16,
+            14,
+            12
+        ],
+        "id": 823219,
+        "original_language": "lv",
+        "original_title": "Straume",
+        "overview": "Un chat se réveille dans un univers envahi par l’eau où toute vie humaine semble avoir disparu. Il trouve refuge sur un bateau avec un groupe d’autres animaux. Mais s’entendre avec eux s’avère un défi encore plus grand que de surmonter sa peur de l'eau ! Tous devront désormais apprendre à surmonter leurs différences et à s’adapter au nouveau monde qui s’impose à eux.",
+        "popularity": 635.112,
+        "poster_path": "/zeinX0xt78GgtpCQjx7d2S6Gh7g.jpg",
+        "release_date": "2024-08-29",
+        "title": "Flow, le chat qui n'avait plus peur de l'eau",
+        "video": false,
+        "vote_average": 8.4,
+        "vote_count": 771
+    },
+    {
+        "adult": false,
+        "backdrop_path": "/rhc8Mtuo3Kh8CndnlmTNMF8o9pU.jpg",
+        "genre_ids": [
+            53,
+            28
+        ],
+        "id": 1005331,
+        "original_language": "en",
+        "original_title": "Carry-On",
+        "overview": "La veille de Noël, un agent de sécurité fonce pour déjouer les plans d'un mystérieux voyageur qui le force à laisser passer un objet dangereux.",
+        "popularity": 627.522,
+        "poster_path": "/tqudmLEboBKhAIpusqZKio58VE0.jpg",
+        "release_date": "2024-12-05",
+        "title": "Carry-On",
+        "video": false,
+        "vote_average": 6.9,
+        "vote_count": 1652
+    },
+    {
+        "adult": false,
+        "backdrop_path": "/lntyt4OVDbcxA1l7LtwITbrD3FI.jpg",
+        "genre_ids": [
+            10749,
+            18
+        ],
+        "id": 1010581,
+        "original_language": "es",
+        "original_title": "Culpa mía",
+        "overview": "Noah doit quitter sa ville, son petit ami et ses amis pour emménager dans le manoir de William Leister, le nouveau et riche mari de sa mère. Âgée de dix-sept ans, fière et indépendante, Noah rencontre Nick, son nouveau demi-frère, et leurs fortes personnalités s’entrechoquent dès le début. Noah découvre bientôt que derrière l'image d'un fils modèle, Nick cache une vie de bagarre, de jeu et de courses automobiles illégales. Malgré l'abîme qui les sépare, tous deux commencent à ressentir une attirance irrésistible qui se transformera bientôt en feu et en folle passion. Ni la rivalité permanente, ni l'opposition de leur entourage ne peuvent les empêcher de tomber secrètement et follement amoureux. Mais le présent turbulent de Nick et le passé orageux de Noah mettront à l'épreuve leur vie et leur amour interdit.",
+        "popularity": 591.473,
+        "poster_path": "/3ZCfSSxZ2e4Kiwu3Y9dvfT5n1m6.jpg",
+        "release_date": "2023-06-08",
+        "title": "À contre-sens",
+        "video": false,
+        "vote_average": 7.9,
+        "vote_count": 3391
+    }
+]
