@@ -11,12 +11,13 @@ class DraggableCardDemo extends StatefulWidget {
   State<DraggableCardDemo> createState() => _DraggableCardDemoState();
 }
 
-class _DraggableCardDemoState extends State<DraggableCardDemo> with SingleTickerProviderStateMixin {
+class _DraggableCardDemoState extends State<DraggableCardDemo>
+    with TickerProviderStateMixin {
   int currentIndex = 0;
   Offset cardOffset = Offset.zero;
   bool isFlipped = false;
 
-  // Déplacer la carte
+  // Déplacer la carte (fluide)
   void updatePosition(DragUpdateDetails details) {
     if (!mounted) return;
     setState(() {
@@ -24,96 +25,123 @@ class _DraggableCardDemoState extends State<DraggableCardDemo> with SingleTicker
     });
   }
 
-void moveToNextCard() {
-  if (!mounted) return; // ✅ Empêche le crash si le widget a été démonté
+  // Animation vers une position cible
+  void animateCardTo({
+    required Offset targetOffset,
+    required VoidCallback onComplete,
+  }) {
+    final controller = AnimationController(
+      duration: const Duration(milliseconds: 300),
+      vsync: this,
+    );
 
-  setState(() {
-    isFlipped = false;
-  });
+    final animation = Tween<Offset>(
+      begin: cardOffset,
+      end: targetOffset,
+    ).animate(CurvedAnimation(parent: controller, curve: Curves.easeOut));
 
-  animateCardTo(
-    targetOffset: Offset(
-      cardOffset.dx > 0 ? MediaQuery.of(context).size.width : -MediaQuery.of(context).size.width,
-      cardOffset.dy,
-    ),
-    onComplete: () {
-      if (!mounted) return; // ✅ Vérifie à nouveau si le widget est encore là
+    animation.addListener(() {
+      if (!mounted) return;
       setState(() {
-        cardOffset = Offset.zero;
-        currentIndex = (currentIndex + 1) % widget.movies.length;
+        cardOffset = animation.value;
       });
-    },
-  );
-}
-
-void animateCardTo({required Offset targetOffset, required VoidCallback onComplete}) {
-  AnimationController controller = AnimationController(
-    duration: const Duration(milliseconds: 300),
-    vsync: this, // Ajoute SingleTickerProviderStateMixin à _DraggableCardDemoState
-  );
-
-  Animation<Offset> animation = Tween<Offset>(
-    begin: cardOffset,
-    end: targetOffset,
-  ).animate(CurvedAnimation(parent: controller, curve: Curves.easeOut));
-
-  animation.addListener(() {
-    if (!mounted) return;
-    setState(() {
-      cardOffset = animation.value;
     });
-  });
 
-  animation.addStatusListener((status) {
-    if (status == AnimationStatus.completed) {
-      onComplete();
-      controller.dispose();
+    animation.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        onComplete();
+        controller.dispose();
+      }
+    });
+
+    controller.forward();
+  }
+
+  // Passe au film suivant, en faisant sortir la carte dans la bonne direction
+  void moveToNextCard(String action) {
+    if (!mounted) return;
+
+    setState(() {
+      isFlipped = false;
+    });
+
+    final size = MediaQuery.of(context).size;
+    late final Offset targetOffset;
+
+    switch (action) {
+      case "like":
+        targetOffset = Offset(size.width, 0);
+        break;
+      case "dislike":
+        targetOffset = Offset(-size.width, 0);
+        break;
+      case "superlike":
+        targetOffset = Offset(0, -size.height);
+        break;
+      case "unseen":
+        targetOffset = Offset(0, size.height);
+        break;
+      default:
+        targetOffset = Offset(size.width, 0);
     }
-  });
 
-  controller.forward();
-}
+    animateCardTo(
+      targetOffset: targetOffset,
+      onComplete: () {
+        if (!mounted) return;
 
+        setState(() {
+          cardOffset = Offset.zero;
+
+          if (currentIndex < widget.movies.length - 1) {
+            currentIndex++;
+          } else {
+            currentIndex = widget.movies.length; // fin de pile => plus de carte
+          }
+        });
+      },
+    );
+  }
 
   // Gérer la fin du mouvement
-void handlePanEnd() {
-  if (widget.movies.isEmpty) {
-    print("Aucun film à afficher !");
-    return;
-  }
+  void handlePanEnd() {
+    if (widget.movies.isEmpty || currentIndex >= widget.movies.length) {
+      return;
+    }
 
-  print("Nombre total de films : ${widget.movies.length}");
-  print("Index actuel : $currentIndex");
-  final provider = Provider.of<MovieProvider>(context, listen: false);
-  String action = "";
+    final provider = Provider.of<MovieProvider>(context, listen: false);
+    String action = "";
 
-  if (cardOffset.dx > 150) {
-    action = "like"; // Swipe droite
-  } else if (cardOffset.dx < -150) {
-    action = "dislike"; // Swipe gauche
-  } else if (cardOffset.dy < -150) {
-    action = "superlike"; // Swipe haut
-  } else if (cardOffset.dy > 150) {
-    action = "unseen"; // Swipe bas
-  }
+    if (cardOffset.dx > 150) {
+      action = "like"; // Swipe droite
+    } else if (cardOffset.dx < -150) {
+      action = "dislike"; // Swipe gauche
+    } else if (cardOffset.dy < -150) {
+      action = "superlike"; // Swipe haut
+    } else if (cardOffset.dy > 150) {
+      action = "unseen"; // Swipe bas
+    }
 
-  if (action.isNotEmpty) {
-    provider.addMovie(widget.movies[currentIndex], action); // Ajout dans la bonne liste
-    moveToNextCard();
-  } else {
-    resetPosition(); // Remet la carte au centre si le swipe est annulé
+    if (action.isNotEmpty) {
+      // Important : on enregistre puis on anime vers l'extérieur et on incrémente
+      provider.addMovie(widget.movies[currentIndex], action);
+      moveToNextCard(action);
+    } else {
+      resetPosition();
+    }
   }
-}
 
   // Réinitialiser la position
   void resetPosition() {
+    if (!mounted) return;
     setState(() {
       cardOffset = Offset.zero;
     });
   }
 
-  // Bascule entre le recto et le verso
+  // Bascule recto/verso
   void flipCard() {
+    if (!mounted) return;
     setState(() {
       isFlipped = !isFlipped;
     });
@@ -121,8 +149,6 @@ void handlePanEnd() {
 
   @override
   Widget build(BuildContext context) {
-    print("Rendering carte index: $currentIndex");
-    
     final int remainingCards = widget.movies.length - currentIndex;
 
     return LayoutBuilder(
@@ -135,7 +161,7 @@ void handlePanEnd() {
 
         return Stack(
           children: [
-            // Carte en arrière-plan
+            // Carte arrière-plan
             if (currentIndex + 1 < widget.movies.length)
               Positioned(
                 left: centerX - cardW / 2,
@@ -148,14 +174,14 @@ void handlePanEnd() {
                 ),
               ),
 
-            // Carte draggable (active) avec flipping
+            // Carte active
             if (remainingCards > 0)
               Positioned(
-                key: ValueKey(currentIndex),
                 left: centerX - cardW / 2 + cardOffset.dx,
                 top: centerY - cardH / 2 + cardOffset.dy,
                 child: GestureDetector(
-                  // ✅ IMPORTANT : pas de UniqueKey ici
+                  // 🔥 KEY SUR LA CARTE ACTIVE => force une vraie reconstruction au changement d'index
+                  key: ValueKey('card_$currentIndex'),
                   onTap: flipCard,
                   onPanUpdate: updatePosition,
                   onPanEnd: (_) => handlePanEnd(),
@@ -175,11 +201,19 @@ void handlePanEnd() {
                   ),
                 ),
               ),
+
+            // Optionnel : état fin de pile
+            if (remainingCards <= 0)
+              const Center(
+                child: Text(
+                  "Plus de films à swiper",
+                  style: TextStyle(fontSize: 16),
+                ),
+              ),
           ],
         );
       },
     );
-
   }
 }
 

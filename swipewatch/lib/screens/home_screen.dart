@@ -5,13 +5,25 @@ import 'package:swipewatch/providers/movie_provider.dart';
 import 'package:swipewatch/widgets/swiper.dart';
 import 'package:swipewatch/screens/lists_screen.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final DataService dataService = DataService();
+  State<HomeScreen> createState() => _HomeScreenState();
+}
 
+class _HomeScreenState extends State<HomeScreen> {
+  late Future<List<Map<String, dynamic>>> _moviesFuture;
+  final DataService _dataService = DataService();
+
+  @override
+  void initState() {
+    super.initState();
+    _moviesFuture = _dataService.loadMovies();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('SwipeWatch'),
@@ -31,7 +43,7 @@ class HomeScreen extends StatelessWidget {
         children: [
           Expanded(
             child: FutureBuilder<List<Map<String, dynamic>>>(
-              future: dataService.loadMovies(),
+              future: _moviesFuture,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
@@ -42,7 +54,6 @@ class HomeScreen extends StatelessWidget {
                 }
 
                 final movies = snapshot.data!;
-                print("Films chargés : ${movies.length}");
                 return DraggableCardDemo(movies: movies);
               },
             ),
@@ -69,32 +80,35 @@ class HomeScreen extends StatelessWidget {
 
   // Widget pour afficher le nombre de films dans chaque liste
   Widget _buildCounter(BuildContext context, String label, String type) {
-    final movieProvider = Provider.of<MovieProvider>(context);
-    int count = 0;
+    return Consumer<MovieProvider>(
+      builder: (context, movieProvider, child) {
+        int count = 0;
 
-    switch (type) {
-      case "like":
-        count = movieProvider.likedMovies.length;
-        break;
-      case "dislike":
-        count = movieProvider.dislikedMovies.length;
-        break;
-      case "superlike":
-        count = movieProvider.superLikedMovies.length;
-        break;
-      case "unseen":
-        count = movieProvider.unseenMovies.length;
-        break;
-    }
+        switch (type) {
+          case "like":
+            count = movieProvider.likedMovies.length;
+            break;
+          case "dislike":
+            count = movieProvider.dislikedMovies.length;
+            break;
+          case "superlike":
+            count = movieProvider.superLikedMovies.length;
+            break;
+          case "unseen":
+            count = movieProvider.unseenMovies.length;
+            break;
+        }
 
-    return Column(
-      children: [
-        Text(
-          count.toString(),
-          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-        ),
-        Text(label, style: const TextStyle(fontSize: 14)),
-      ],
+        return Column(
+          children: [
+            Text(
+              count.toString(),
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            Text(label, style: const TextStyle(fontSize: 14)),
+          ],
+        );
+      },
     );
   }
 }
