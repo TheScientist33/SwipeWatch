@@ -114,6 +114,7 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 _buildCounter(context, "❤️ Likes", "like"),
                 _buildCounter(context, "💔 Dislikes", "dislike"),
+                _buildCounter(context, "🌟 Pépites", "favorite"),
                 _buildCounter(context, "✨ Superlikes", "superlike"),
                 _buildCounter(context, "📌 Unseen", "unseen"),
               ],
@@ -136,6 +137,9 @@ class _HomeScreenState extends State<HomeScreen> {
             break;
           case "dislike":
             count = movieProvider.dislikedMovies.length;
+            break;
+          case "favorite":
+            count = movieProvider.favoriteMovies.length;
             break;
           case "superlike":
             count = movieProvider.superLikedMovies.length;

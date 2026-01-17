@@ -21,7 +21,7 @@ class MovieDetailsScreen extends StatefulWidget {
 class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
   final ApiService _apiService = ApiService();
   
-  final List<String> _listOrder = ['like', 'superlike', 'unseen', 'dislike'];
+  final List<String> _listOrder = ['favorite', 'like', 'superlike', 'unseen', 'dislike'];
   late PageController _verticalController;
   final Map<String, PageController> _horizontalControllers = {};
   
@@ -101,7 +101,17 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
           return Stack(
             fit: StackFit.expand,
             children: [
-              // Watermark
+              // Horizontal Carousel
+              PageView.builder(
+                controller: _horizontalControllers[listType],
+                scrollDirection: Axis.horizontal,
+                itemCount: movies.length,
+                itemBuilder: (context, horizontalIndex) {
+                  return MovieDetailItem(movie: movies[horizontalIndex], apiService: _apiService);
+                },
+              ),
+
+              // Watermark (MOVED TO FRONT)
               Center(
                 child: RotatedBox(
                   quarterTurns: 3,
@@ -111,21 +121,11 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                       style: TextStyle(
                         fontSize: 100, 
                         fontWeight: FontWeight.w900, 
-                        color: Colors.white.withOpacity(0.1) // Plus visible
+                        color: Colors.white.withOpacity(0.15) // Visible on top
                       ),
                     ),
                   ),
                 ),
-              ),
-
-              // Horizontal Carousel
-              PageView.builder(
-                controller: _horizontalControllers[listType],
-                scrollDirection: Axis.horizontal,
-                itemCount: movies.length,
-                itemBuilder: (context, horizontalIndex) {
-                  return MovieDetailItem(movie: movies[horizontalIndex], apiService: _apiService);
-                },
               ),
 
               // Arrows (Clickable)
@@ -146,6 +146,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
   // ... Helpers _getList, _getListName, _buildEmptyState remain the same ...
   List<Map<String, dynamic>> _getList(MovieProvider provider, String type) {
     switch (type) {
+      case 'favorite': return provider.favoriteMovies;
       case 'like': return provider.likedMovies;
       case 'superlike': return provider.superLikedMovies;
       case 'unseen': return provider.unseenMovies;
@@ -156,6 +157,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
 
   String _getListName(String type) {
     switch (type) {
+      case 'favorite': return 'Pépites';
       case 'like': return 'Likes';
       case 'superlike': return 'Superlikes';
       case 'unseen': return 'À Voir';

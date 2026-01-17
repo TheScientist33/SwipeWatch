@@ -18,6 +18,7 @@ class ListsScreen extends StatelessWidget {
       appBar: AppBar(title: const Text("Mes Listes")),
       body: ListView(
         children: [
+          _buildMovieList(context, "🌟 Coups de Cœur", movieProvider.favoriteMovies, "favorite"),
           _buildMovieList(context, "❤️ Likes", movieProvider.likedMovies, "like"),
           _buildMovieList(context, "💔 Dislikes", movieProvider.dislikedMovies, "dislike"),
           _buildMovieList(context, "✨ Superlikes", movieProvider.superLikedMovies, "superlike"),
@@ -83,6 +84,9 @@ class ListsScreen extends StatelessWidget {
                ));
                options.add(const PopupMenuDivider());
 
+               if (currentKey != 'favorite') {
+                 options.add(const PopupMenuItem(value: 'favorite', child: Text('Déplacer vers 🌟 Coups de Cœur')));
+               }
                if (currentKey != 'like') {
                  options.add(const PopupMenuItem(value: 'like', child: Text('Déplacer vers ❤️ Likes')));
                }

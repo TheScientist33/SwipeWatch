@@ -171,6 +171,22 @@ class _DraggableCardDemoState extends State<DraggableCardDemo>
 
         return Stack(
           children: [
+            // --- OVERLAYS DE FOND DYNAMIQUES ---
+            // Fond Superlike (Bleu)
+            Positioned.fill(
+              child: Opacity(
+                opacity: (cardOffset.dy < 0 ? (-cardOffset.dy / 300).clamp(0.0, 0.6) : 0.0),
+                child: Container(decoration: BoxDecoration(gradient: RadialGradient(colors: [Colors.blue.withOpacity(0.4), Colors.transparent], radius: 1.5))),
+              ),
+            ),
+            // Fond Unseen (Gris/Noir)
+            Positioned.fill(
+              child: Opacity(
+                opacity: (cardOffset.dy > 0 ? (cardOffset.dy / 300).clamp(0.0, 0.7) : 0.0),
+                child: Container(color: Colors.black.withOpacity(0.8)),
+              ),
+            ),
+
             // Carte arrière-plan
             if (currentIndex + 1 < widget.movies.length)
               Positioned(
@@ -184,7 +200,6 @@ class _DraggableCardDemoState extends State<DraggableCardDemo>
                 ),
               ),
 
-            // Carte active
             if (remainingCards > 0)
               Positioned(
                 left: centerX - cardW / 2 + cardOffset.dx,
@@ -203,6 +218,11 @@ class _DraggableCardDemoState extends State<DraggableCardDemo>
                         ? BackCard(
                       key: const ValueKey('back'),
                       movie: widget.movies[currentIndex],
+                      onFavorite: () {
+                         final provider = Provider.of<MovieProvider>(context, listen: false);
+                         provider.addMovie(widget.movies[currentIndex], 'favorite');
+                         moveToNextCard('like'); // On fait sortir par la droite par défaut
+                      },
                     )
                         : FrontCard(
                       key: const ValueKey('front'),
@@ -220,6 +240,58 @@ class _DraggableCardDemoState extends State<DraggableCardDemo>
                   style: TextStyle(fontSize: 16),
                 ),
               ),
+
+             // --- IDICATEURS GUIDES (FOREGROUND) ---
+             IgnorePointer(
+               child: Stack(
+                 children: [
+                    // Dislike (Gauche) -> Noir
+                    Positioned(
+                      left: 20, top: centerY - 30,
+                      child: Opacity(
+                        opacity: (cardOffset.dx < 0 ? (-cardOffset.dx / 100).clamp(0.0, 1.0) : 0.0),
+                        child: const Column(children: [
+                           Icon(Icons.close, color: Colors.black, size: 60, shadows: [Shadow(color: Colors.white54, blurRadius: 20)]), 
+                           Text("DISLIKE", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 24, shadows: [Shadow(color: Colors.white54, blurRadius: 20)]))
+                        ]),
+                      ),
+                    ),
+                    // Like (Droite) -> Rouge
+                    Positioned(
+                      right: 20, top: centerY - 30,
+                      child: Opacity(
+                         opacity: (cardOffset.dx > 0 ? (cardOffset.dx / 100).clamp(0.0, 1.0) : 0.0),
+                         child: const Column(children: [
+                           Icon(Icons.favorite, color: Colors.red, size: 60), 
+                           Text("LIKE", style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold, fontSize: 24))
+                         ]),
+                      ),
+                    ),
+                    // Superlike (Haut) -> Bleu
+                    Positioned(
+                      top: 40, left: centerX - 60,
+                      child: Opacity(
+                         opacity: (cardOffset.dy < 0 ? (-cardOffset.dy / 100).clamp(0.0, 1.0) : 0.0),
+                         child: const Column(children: [
+                           Icon(Icons.star, color: Colors.blue, size: 60), 
+                           Text("SUPERLIKE", style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold, fontSize: 24))
+                 ]),
+                      ),
+                    ),
+                    // Unseen (Bas) -> Gris
+                    Positioned(
+                      bottom: 40, left: centerX - 50,
+                      child: Opacity(
+                         opacity: (cardOffset.dy > 0 ? (cardOffset.dy / 100).clamp(0.0, 1.0) : 0.0),
+                         child: const Column(children: [
+                           Icon(Icons.visibility_off, color: Colors.grey, size: 60), 
+                           Text("UNSEEN", style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold, fontSize: 24))
+                 ]),
+                      ),
+                    ),
+                 ],
+               ),
+             ),
           ],
         );
       },
@@ -261,8 +333,9 @@ class FrontCard extends StatelessWidget {
 
 class BackCard extends StatelessWidget {
   final Map<String, dynamic> movie;
+  final VoidCallback onFavorite;
 
-  const BackCard({Key? key, required this.movie}) : super(key: key);
+  const BackCard({Key? key, required this.movie, required this.onFavorite}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -300,12 +373,21 @@ class BackCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20),
-              Text(
-                'Note : ${movie['vote_average']?.toString() ?? 'N/A'} / 10',
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Note : ${movie['vote_average']?.toString() ?? 'N/A'} / 10',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.star, color: Colors.amber, size: 30),
+                    onPressed: onFavorite,
+                  ),
+                ],
               ),
             ],
           ),

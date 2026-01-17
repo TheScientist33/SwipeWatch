@@ -5,6 +5,7 @@ class MovieProvider with ChangeNotifier {
   List<Map<String, dynamic>> dislikedMovies = [];
   List<Map<String, dynamic>> superLikedMovies = [];
   List<Map<String, dynamic>> unseenMovies = [];
+  List<Map<String, dynamic>> favoriteMovies = [];
 
   // Fonction pour vérifier si un film est déjà dans la liste
   bool isMovieInList(List<Map<String, dynamic>> list, Map<String, dynamic> movie) {
@@ -25,9 +26,13 @@ class MovieProvider with ChangeNotifier {
       case "unseen":
         if (!isMovieInList(unseenMovies, movie)) unseenMovies.add(movie);
         break;
+      case "favorite":
+        if (!isMovieInList(favoriteMovies, movie)) favoriteMovies.add(movie);
+        break;
     }
     notifyListeners();
   }
+
   // Helper pour récupérer la bonne liste selon le type
   List<Map<String, dynamic>> _getListByType(String type) {
     switch (type) {
@@ -35,6 +40,7 @@ class MovieProvider with ChangeNotifier {
       case "dislike": return dislikedMovies;
       case "superlike": return superLikedMovies;
       case "unseen": return unseenMovies;
+      case "favorite": return favoriteMovies;
       default: return [];
     }
   }
