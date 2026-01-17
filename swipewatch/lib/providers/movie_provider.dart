@@ -8,7 +8,7 @@ class MovieProvider with ChangeNotifier {
 
   // Fonction pour vérifier si un film est déjà dans la liste
   bool isMovieInList(List<Map<String, dynamic>> list, Map<String, dynamic> movie) {
-    return list.any((m) => m['title'] == movie['title']);
+    return list.any((m) => m['id'] == movie['id']);
   }
 
   void addMovie(Map<String, dynamic> movie, String action) {

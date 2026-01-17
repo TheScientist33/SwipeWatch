@@ -33,7 +33,7 @@ class ListsScreen extends StatelessWidget {
             fit: BoxFit.cover,
             errorBuilder: (_, __, ___) => const Icon(Icons.image_not_supported),
           ),
-          title: Text(movie['title'] ?? 'Titre inconnu'),
+          title: Text(movie['title'] ?? movie['name'] ?? 'Titre inconnu'),
           subtitle: Text("Note : ${movie['vote_average']?.toString() ?? 'N/A'} / 10"),
         );
       }).toList(),

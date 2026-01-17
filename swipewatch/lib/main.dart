@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:swipewatch/providers/movie_provider.dart';
-import 'package:swipewatch/screens/home_screen.dart';
+import 'package:swipewatch/screens/category_selection_screen.dart';
 
-void main() {
-  const apiKey = "b56548a8df08a342516316ebd40198ef";
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  try {
+    await dotenv.load(fileName: "api_key.env");
+  } catch (e) {
+    print("Warning: Impossible de charger api_key.env: $e");
+  }
+  
+  const apiKey = "b56548a8df08a342516316ebd40198ef"; // Fallback/Legacy
   runApp(const MyApp(apiKey: apiKey));
 }
 
@@ -23,7 +32,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'SwipeWatch',
         theme: ThemeData(primarySwatch: Colors.blue),
-        home: const HomeScreen(),
+        home: const CategorySelectionScreen(),
       ),
     );
   }

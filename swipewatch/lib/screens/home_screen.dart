@@ -1,32 +1,85 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:swipewatch/services/data_service.dart';
+import 'package:swipewatch/services/api_service.dart'; // Changed from data_service
 import 'package:swipewatch/providers/movie_provider.dart';
 import 'package:swipewatch/widgets/swiper.dart';
 import 'package:swipewatch/screens/lists_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  final String title;
+  final Future<List<Map<String, dynamic>>> Function({int page})? fetchFunction;
+
+  const HomeScreen({
+    Key? key, 
+    this.title = 'SwipeWatch', 
+    this.fetchFunction
+  }) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late Future<List<Map<String, dynamic>>> _moviesFuture;
-  final DataService _dataService = DataService();
+  final ApiService _apiService = ApiService();
+  
+  // State pour la pagination
+  final List<Map<String, dynamic>> _movies = [];
+  int _currentPage = 1;
+  bool _isLoading = false;
+  bool _hasError = false;
 
   @override
   void initState() {
     super.initState();
-    _moviesFuture = _dataService.loadMovies();
+    _loadMovies();
+  }
+
+  Future<void> _loadMovies() async {
+    if (_isLoading) return;
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      final List<Map<String, dynamic>> newMovies;
+      
+      if (widget.fetchFunction != null) {
+        // On appelle la fonction passée en paramètre avec le numéro de page
+        newMovies = await widget.fetchFunction!(page: _currentPage);
+      } else {
+        newMovies = await _apiService.getPopularMovies(page: _currentPage);
+      }
+
+      // Filtrer les doublons potentiels (sécurité) et exclusions ID null
+      final uniqueMovies = newMovies.where((newMovie) {
+        return !_movies.any((existing) => existing['id'] == newMovie['id']);
+      }).toList();
+
+      if (mounted) {
+        setState(() {
+          _movies.addAll(uniqueMovies);
+          _currentPage++;
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      print("Erreur loading movies: $e");
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+          // Si c'est la première page et que ça plante, on marque l'erreur
+          if (_movies.isEmpty) _hasError = true;
+        });
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('SwipeWatch'),
+        title: Text(widget.title),
         actions: [
           IconButton(
             icon: const Icon(Icons.list),
@@ -42,21 +95,14 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Column(
         children: [
           Expanded(
-            child: FutureBuilder<List<Map<String, dynamic>>>(
-              future: _moviesFuture,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  return const Center(child: Text('Erreur de chargement des films'));
-                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return const Center(child: Text('Aucun film trouvé'));
-                }
-
-                final movies = snapshot.data!;
-                return DraggableCardDemo(movies: movies);
-              },
-            ),
+            child: _hasError 
+                ? const Center(child: Text("Erreur de chargement 😢"))
+                : _movies.isEmpty && _isLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : DraggableCardDemo(
+                        movies: _movies,
+                        onLoadMore: _loadMovies,
+                      ),
           ),
 
           // Affichage des compteurs

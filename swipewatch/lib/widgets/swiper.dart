@@ -4,8 +4,13 @@ import 'package:swipewatch/providers/movie_provider.dart';
 
 class DraggableCardDemo extends StatefulWidget {
   final List<Map<String, dynamic>> movies;
+  final VoidCallback? onLoadMore; // Nouvelle callback
 
-  const DraggableCardDemo({Key? key, required this.movies}) : super(key: key);
+  const DraggableCardDemo({
+    Key? key,
+    required this.movies,
+    this.onLoadMore,
+  }) : super(key: key);
 
   @override
   State<DraggableCardDemo> createState() => _DraggableCardDemoState();
@@ -92,6 +97,11 @@ class _DraggableCardDemoState extends State<DraggableCardDemo>
 
         setState(() {
           cardOffset = Offset.zero;
+
+          // Si on approche de la fin (ex: reste 5 cartes), on demande à charger la suite
+          if (widget.movies.length - currentIndex <= 5) {
+             widget.onLoadMore?.call();
+          }
 
           if (currentIndex < widget.movies.length - 1) {
             currentIndex++;
@@ -271,7 +281,7 @@ class BackCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                movie['title'] ?? 'Titre inconnu',
+                movie['title'] ?? movie['name'] ?? 'Titre inconnu',
                 style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
