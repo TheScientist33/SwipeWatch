@@ -145,14 +145,28 @@ class _HomeScreenState extends State<HomeScreen> {
             break;
         }
 
-        return Column(
-          children: [
-            Text(
-              count.toString(),
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        return InkWell(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ListsScreen(initialType: type),
+              ),
+            );
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(8.0), // Zone tactile plus large
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  count.toString(),
+                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                Text(label, style: const TextStyle(fontSize: 14)),
+              ],
             ),
-            Text(label, style: const TextStyle(fontSize: 14)),
-          ],
+          ),
         );
       },
     );

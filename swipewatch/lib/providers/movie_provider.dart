@@ -28,4 +28,25 @@ class MovieProvider with ChangeNotifier {
     }
     notifyListeners();
   }
+  // Helper pour récupérer la bonne liste selon le type
+  List<Map<String, dynamic>> _getListByType(String type) {
+    switch (type) {
+      case "like": return likedMovies;
+      case "dislike": return dislikedMovies;
+      case "superlike": return superLikedMovies;
+      case "unseen": return unseenMovies;
+      default: return [];
+    }
+  }
+
+  void removeFromList(Map<String, dynamic> movie, String type) {
+    final list = _getListByType(type);
+    list.removeWhere((m) => m['id'] == movie['id']);
+    notifyListeners();
+  }
+
+  void moveMovie(Map<String, dynamic> movie, String oldType, String newType) {
+    removeFromList(movie, oldType);
+    addMovie(movie, newType);
+  }
 }

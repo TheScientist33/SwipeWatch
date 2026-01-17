@@ -65,4 +65,23 @@ class ApiService {
   Future<List<Map<String, dynamic>>> searchContent(String query) async {
     return _get('/search/multi', params: {'query': query});
   }
+  // Récupérer les détails de streaming (Lien + Plateformes)
+  Future<Map<String, dynamic>?> getWatchProviders(int id, String type) async {
+    try {
+      final endpoint = '/$type/$id/watch/providers';
+      final uri = Uri.parse('$baseUrl$endpoint?api_key=$apiKey');
+      final response = await http.get(uri);
+      
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        final results = data['results'];
+        if (results != null && results['FR'] != null) {
+          return results['FR']; // Retourne tout l'objet FR (link, flatrate, rent, buy...)
+        }
+      }
+    } catch (e) {
+      print("Erreur providers: $e");
+    }
+    return null;
+  }
 }
