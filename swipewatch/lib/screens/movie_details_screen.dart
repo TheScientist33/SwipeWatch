@@ -157,7 +157,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
 
   String _getListName(String type) {
     switch (type) {
-      case 'favorite': return 'Pépites';
+      case 'favorite': return 'À voir';
       case 'like': return 'Likes';
       case 'superlike': return 'Superlikes';
       case 'unseen': return 'À Voir';

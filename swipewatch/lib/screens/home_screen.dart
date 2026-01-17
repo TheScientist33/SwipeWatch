@@ -107,16 +107,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
           // Affichage des compteurs
           Container(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            color: Colors.grey[200], // Fond gris léger
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            color: Colors.grey[200],
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _buildCounter(context, "❤️ Likes", "like"),
-                _buildCounter(context, "💔 Dislikes", "dislike"),
-                _buildCounter(context, "🌟 Pépites", "favorite"),
-                _buildCounter(context, "✨ Superlikes", "superlike"),
-                _buildCounter(context, "📌 Unseen", "unseen"),
+                _buildCounter(context, "Likes", "like"),
+                _buildCounter(context, "Dislikes", "dislike"),
+                _buildCounter(context, "À voir", "favorite"),
+                _buildCounter(context, "Superlikes", "superlike"),
+                _buildCounter(context, "Unseen", "unseen"),
               ],
             ),
           ),
@@ -132,42 +132,41 @@ class _HomeScreenState extends State<HomeScreen> {
         int count = 0;
 
         switch (type) {
-          case "like":
-            count = movieProvider.likedMovies.length;
-            break;
-          case "dislike":
-            count = movieProvider.dislikedMovies.length;
-            break;
-          case "favorite":
-            count = movieProvider.favoriteMovies.length;
-            break;
-          case "superlike":
-            count = movieProvider.superLikedMovies.length;
-            break;
-          case "unseen":
-            count = movieProvider.unseenMovies.length;
-            break;
+          case "like": count = movieProvider.likedMovies.length; break;
+          case "dislike": count = movieProvider.dislikedMovies.length; break;
+          case "favorite": count = movieProvider.favoriteMovies.length; break;
+          case "superlike": count = movieProvider.superLikedMovies.length; break;
+          case "unseen": count = movieProvider.unseenMovies.length; break;
         }
 
-        return InkWell(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ListsScreen(initialType: type),
-              ),
-            );
-          },
-          child: Padding(
-            padding: const EdgeInsets.all(8.0), // Zone tactile plus large
+        return Expanded(
+          child: InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ListsScreen(initialType: type),
+                ),
+              );
+            },
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                  count.toString(),
-                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    count.toString(),
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
                 ),
-                Text(label, style: const TextStyle(fontSize: 14)),
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    label,
+                    style: const TextStyle(fontSize: 11, color: Colors.black87),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
               ],
             ),
           ),
