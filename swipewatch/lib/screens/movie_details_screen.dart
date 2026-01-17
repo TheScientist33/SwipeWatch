@@ -230,7 +230,13 @@ class _MovieDetailItemState extends State<MovieDetailItem> {
     final posterPath = widget.movie['poster_path'];
     final overview = widget.movie['overview'];
     final rating = widget.movie['vote_average']?.toStringAsFixed(1) ?? 'N/A';
-    final flatrate = (_providers?['flatrate'] as List?) ?? [];
+    
+    // Filtrage des offres avec pub
+    final rawFlatrate = (_providers?['flatrate'] as List?) ?? [];
+    final flatrate = rawFlatrate.where((p) {
+      final name = p['provider_name']?.toString().toLowerCase() ?? '';
+      return !name.contains('ads') && !name.contains('pub');
+    }).toList();
 
     return Stack(
       fit: StackFit.expand,

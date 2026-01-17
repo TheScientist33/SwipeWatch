@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:swipewatch/providers/movie_provider.dart';
+import 'package:swipewatch/services/api_service.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DraggableCardDemo extends StatefulWidget {
   final List<Map<String, dynamic>> movies;
@@ -331,11 +333,61 @@ class FrontCard extends StatelessWidget {
   }
 }
 
-class BackCard extends StatelessWidget {
+class BackCard extends StatefulWidget {
   final Map<String, dynamic> movie;
   final VoidCallback onFavorite;
 
   const BackCard({Key? key, required this.movie, required this.onFavorite}) : super(key: key);
+
+  @override
+  State<BackCard> createState() => _BackCardState();
+}
+
+class _BackCardState extends State<BackCard> {
+  final ApiService _apiService = ApiService();
+  List<dynamic> _providers = [];
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadProviders();
+  }
+
+  Future<void> _loadProviders() async {
+    final isTv = widget.movie.containsKey('name');
+    final data = await _apiService.getWatchProviders(widget.movie['id'], isTv ? 'tv' : 'movie');
+    if (mounted) {
+      setState(() {
+        // Filtrer les versions avec pub
+        final flatrate = (data?['flatrate'] as List?) ?? [];
+        _providers = flatrate.where((p) {
+          final name = p['provider_name']?.toString().toLowerCase() ?? '';
+          return !name.contains('ads') && !name.contains('pub');
+        }).toList();
+        _isLoading = false;
+      });
+    }
+  }
+
+  void _launchProvider(String providerName) async {
+    final title = widget.movie['title'] ?? widget.movie['name'] ?? '';
+    final encodedTitle = Uri.encodeComponent(title);
+    String url = 'https://www.google.com/search?q=regarder+$encodedTitle+sur+$providerName';
+    
+    // Tentative de deep link simplifié pour mobile
+    if (providerName.toLowerCase().contains('netflix')) {
+      url = 'https://www.netflix.com/search?q=$encodedTitle';
+    } else if (providerName.toLowerCase().contains('disney')) {
+      url = 'https://www.disneyplus.com/search?q=$encodedTitle';
+    } else if (providerName.toLowerCase().contains('amazon') || providerName.toLowerCase().contains('prime')) {
+      url = 'https://www.primevideo.com/search?phrase=$encodedTitle';
+    }
+
+    if (!await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication)) {
+       if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Impossible d\'ouvrir l\'app')));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -354,7 +406,7 @@ class BackCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                movie['title'] ?? movie['name'] ?? 'Titre inconnu',
+                widget.movie['title'] ?? widget.movie['name'] ?? 'Titre inconnu',
                 style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -364,7 +416,7 @@ class BackCard extends StatelessWidget {
               Expanded(
                 child: SingleChildScrollView(
                   child: Text(
-                    movie['overview'] ?? 'Pas de description disponible',
+                    widget.movie['overview'] ?? 'Pas de description disponible',
                     style: const TextStyle(
                       fontSize: 12.5,
                       color: Colors.black54,
@@ -372,12 +424,41 @@ class BackCard extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
+              
+              // Section Plateformes (BackCard)
+              if (_isLoading)
+                const SizedBox(height: 30, child: Center(child: LinearProgressIndicator(minHeight: 2)))
+              else if (_providers.isNotEmpty)
+                SizedBox(
+                  height: 35,
+                  child: ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: _providers.length,
+                    separatorBuilder: (_, __) => const SizedBox(width: 8),
+                    itemBuilder: (context, index) {
+                      final p = _providers[index];
+                      return InkWell(
+                        onTap: () => _launchProvider(p['provider_name']),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(4),
+                          child: Image.network(
+                            'https://image.tmdb.org/t/p/w200${p['logo_path']}',
+                            width: 35,
+                            height: 35,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+
+              const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Note : ${movie['vote_average']?.toString() ?? 'N/A'} / 10',
+                    'Note : ${widget.movie['vote_average']?.toString() ?? 'N/A'} / 10',
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -385,7 +466,7 @@ class BackCard extends StatelessWidget {
                   ),
                   IconButton(
                     icon: const Icon(Icons.star, color: Colors.amber, size: 30),
-                    onPressed: onFavorite,
+                    onPressed: widget.onFavorite,
                   ),
                 ],
               ),
