@@ -209,7 +209,7 @@ class _MovieDetailItemState extends State<MovieDetailItem> {
   }
 
   void _launchProvider(String url) async {
-    if (!await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication)) {
+    if (!await launchUrl(Uri.parse(url), mode: LaunchMode.platformDefault)) {
       if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Impossible d\'ouvrir le lien')));
     }
   }

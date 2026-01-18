@@ -384,7 +384,7 @@ class _BackCardState extends State<BackCard> {
       url = 'https://www.primevideo.com/search?phrase=$encodedTitle';
     }
 
-    if (!await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication)) {
+    if (!await launchUrl(Uri.parse(url), mode: LaunchMode.platformDefault)) {
        if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Impossible d\'ouvrir l\'app')));
     }
   }
