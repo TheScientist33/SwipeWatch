@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:swipewatch/providers/movie_provider.dart';
 import 'package:swipewatch/screens/category_selection_screen.dart';
+import 'package:swipewatch/screens/splash_screen.dart';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -32,7 +33,9 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'SwipeWatch',
         theme: ThemeData(primarySwatch: Colors.blue),
-        home: const CategorySelectionScreen(),
+        home: const SwipeWatchSplashScreen(
+          next: CategorySelectionScreen(),
+        ),
       ),
     );
   }

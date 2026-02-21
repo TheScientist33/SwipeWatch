@@ -209,8 +209,13 @@ class _MovieDetailItemState extends State<MovieDetailItem> {
   }
 
   void _launchProvider(String url) async {
-    if (!await launchUrl(Uri.parse(url), mode: LaunchMode.platformDefault)) {
-      if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Impossible d\'ouvrir le lien')));
+    final uri = Uri.parse(url);
+    // 1. Tente d'ouvrir l'application native (Netflix, Prime, Pathé...)
+    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+      // 2. Si l'app n'est pas installée, ouvre dans le navigateur interne/externe
+      if (!await launchUrl(uri, mode: LaunchMode.inAppBrowserView)) {
+        if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Impossible d\'ouvrir le lien')));
+      }
     }
   }
 
@@ -237,6 +242,23 @@ class _MovieDetailItemState extends State<MovieDetailItem> {
       final name = p['provider_name']?.toString().toLowerCase() ?? '';
       return !name.contains('ads') && !name.contains('pub');
     }).toList();
+
+    // Vérifier si le film est "à l'affiche" dans les cinémas (sorti il y a moins de 100 jours et plus de -15 jours)
+    bool isInTheaters = false;
+    final isTv = widget.movie.containsKey('name');
+    if (!isTv) {
+      final releaseDateStr = widget.movie['release_date'];
+      if (releaseDateStr != null && releaseDateStr.toString().isNotEmpty) {
+        try {
+          final releaseDate = DateTime.parse(releaseDateStr.toString());
+          final now = DateTime.now();
+          final difference = now.difference(releaseDate).inDays;
+          if (difference >= -15 && difference <= 100) {
+            isInTheaters = true;
+          }
+        } catch (_) {}
+      }
+    }
 
     return Stack(
       fit: StackFit.expand,
@@ -277,9 +299,35 @@ class _MovieDetailItemState extends State<MovieDetailItem> {
                 child: SingleChildScrollView(child: Text(overview ?? "Aucun résumé", style: const TextStyle(color: Colors.white70, fontSize: 15, height: 1.4, shadows: [Shadow(color: Colors.black, blurRadius: 4)]))),
               ),
               const SizedBox(height: 24),
-
-              if (_isLoading) 
+              
+              if (_isLoading)
                  const Center(child: SizedBox(height: 24, width: 24, child: CircularProgressIndicator(strokeWidth: 2)))
+              else if (isInTheaters)
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text("Au cinéma :", style: TextStyle(color: Colors.white70, fontSize: 14)),
+                    const SizedBox(height: 8),
+                    Wrap(
+                      spacing: 12,
+                      children: [
+                        InkWell(
+                          onTap: () => _launchProvider('https://www.pathe.fr/recherche?q=${Uri.encodeComponent(title)}'),
+                          child: Container(
+                            width: 50,
+                            height: 50,
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFFFCC00), // Vrai jaune Pathé
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(color: Colors.white24),
+                            ),
+                            child: const Icon(Icons.local_movies, color: Colors.black, size: 30),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                )
               else if (flatrate.isNotEmpty)
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -307,14 +355,40 @@ class _MovieDetailItemState extends State<MovieDetailItem> {
                   ],
                 )
               else 
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton.icon(
-                    style: ElevatedButton.styleFrom(backgroundColor: Colors.white24, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30))),
-                    onPressed: () => _launchProvider('https://www.google.com/search?q=regarder+${Uri.encodeComponent(title)}+streaming'),
-                    icon: const Icon(Icons.search),
-                    label: const Text("Chercher sur Google"),
-                  ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text("Rechercher le film :", style: TextStyle(color: Colors.white70, fontSize: 14)),
+                    const SizedBox(height: 8),
+                    Wrap(
+                      spacing: 12,
+                      children: [
+                        InkWell(
+                          onTap: () => _launchProvider('https://www.google.com/search?q=regarder+${Uri.encodeComponent(title)}+streaming'),
+                          child: Container(
+                            width: 50,
+                            height: 50,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(color: Colors.white24),
+                            ),
+                            // Un 'G' stylisé coloré de google ou juste une icône search colorée
+                            child: const Center(
+                              child: Text(
+                                "G",
+                                style: TextStyle(
+                                  fontSize: 32,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.blue, // Bleu Google
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
                 
               const SizedBox(height: 20),

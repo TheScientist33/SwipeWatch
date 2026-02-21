@@ -375,8 +375,11 @@ class _BackCardState extends State<BackCard> {
     final encodedTitle = Uri.encodeComponent(title);
     String url = 'https://www.google.com/search?q=regarder+$encodedTitle+sur+$providerName';
     
-    // Tentative de deep link simplifié pour mobile
-    if (providerName.toLowerCase().contains('netflix')) {
+    if (providerName == 'pathe') {
+      url = 'https://www.pathe.fr/recherche?q=$encodedTitle';
+    } else if (providerName == 'google') {
+      url = 'https://www.google.com/search?q=regarder+$encodedTitle+streaming';
+    } else if (providerName.toLowerCase().contains('netflix')) {
       url = 'https://www.netflix.com/search?q=$encodedTitle';
     } else if (providerName.toLowerCase().contains('disney')) {
       url = 'https://www.disneyplus.com/search?q=$encodedTitle';
@@ -384,8 +387,13 @@ class _BackCardState extends State<BackCard> {
       url = 'https://www.primevideo.com/search?phrase=$encodedTitle';
     }
 
-    if (!await launchUrl(Uri.parse(url), mode: LaunchMode.platformDefault)) {
-       if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Impossible d\'ouvrir l\'app')));
+    final uri = Uri.parse(url);
+    // 1. Tente d'ouvrir l'application native (Netflix, Prime, Pathé...)
+    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+       // 2. Fallback navigateur si l'app n'est pas installée
+       if (!await launchUrl(uri, mode: LaunchMode.inAppBrowserView)) {
+          if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Impossible d\'ouvrir l\'app')));
+       }
     }
   }
 
@@ -428,11 +436,49 @@ class _BackCardState extends State<BackCard> {
               
               // Section Plateformes (BackCard)
               if (_isLoading)
-                const SizedBox(height: 30, child: Center(child: LinearProgressIndicator(minHeight: 2)))
-              else if (_providers.isNotEmpty)
-                SizedBox(
-                  height: 35,
-                  child: ListView.separated(
+                const SizedBox(height: 35, child: Center(child: LinearProgressIndicator(minHeight: 2)))
+              else...() {
+                 // Vérifier si le film est au cinéma
+                 bool isInTheaters = false;
+                 final isTv = widget.movie.containsKey('name');
+                 if (!isTv) {
+                   final releaseDateStr = widget.movie['release_date'];
+                   if (releaseDateStr != null && releaseDateStr.toString().isNotEmpty) {
+                     try {
+                       final releaseDate = DateTime.parse(releaseDateStr.toString());
+                       final now = DateTime.now();
+                       final difference = now.difference(releaseDate).inDays;
+                       if (difference >= -15 && difference <= 100) {
+                         isInTheaters = true;
+                       }
+                     } catch (_) {}
+                   }
+                 }
+
+                 if (isInTheaters) {
+                   return [
+                     SizedBox(
+                       height: 35,
+                       child: InkWell(
+                         onTap: () => _launchProvider('pathe'),
+                         child: Container(
+                           width: 35,
+                           height: 35,
+                           decoration: BoxDecoration(
+                             color: const Color(0xFFFFCC00),
+                             borderRadius: BorderRadius.circular(4),
+                             border: Border.all(color: Colors.white24),
+                           ),
+                           child: const Icon(Icons.local_movies, color: Colors.black, size: 20),
+                         ),
+                       ),
+                     )
+                   ];
+                 } else if (_providers.isNotEmpty) {
+                   return [
+                     SizedBox(
+                       height: 35,
+                       child: ListView.separated(
                     scrollDirection: Axis.horizontal,
                     itemCount: _providers.length,
                     separatorBuilder: (_, __) => const SizedBox(width: 8),
@@ -449,9 +495,40 @@ class _BackCardState extends State<BackCard> {
                           ),
                         ),
                       );
-                    },
-                  ),
-                ),
+                      },
+                    ),
+                  )
+                ];
+              } else {
+                 return [
+                   SizedBox(
+                     height: 35,
+                     child: InkWell(
+                       onTap: () => _launchProvider('google'),
+                       child: Container(
+                         width: 35,
+                         height: 35,
+                         decoration: BoxDecoration(
+                           color: Colors.white,
+                           borderRadius: BorderRadius.circular(4),
+                           border: Border.all(color: Colors.white24),
+                         ),
+                         child: const Center(
+                           child: Text(
+                             "G",
+                             style: TextStyle(
+                               fontSize: 20,
+                               fontWeight: FontWeight.bold,
+                               color: Colors.blue,
+                             ),
+                           ),
+                         ),
+                       ),
+                     ),
+                   )
+                 ];
+              }
+            }(),
 
               const SizedBox(height: 10),
               Row(

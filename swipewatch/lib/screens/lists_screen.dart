@@ -4,6 +4,7 @@ import 'package:swipewatch/providers/movie_provider.dart';
 import 'package:swipewatch/screens/movie_details_screen.dart';
 import 'package:swipewatch/services/api_service.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:share_plus/share_plus.dart';
 
 class ListsScreen extends StatelessWidget {
   final String? initialType;
@@ -18,20 +19,105 @@ class ListsScreen extends StatelessWidget {
       appBar: AppBar(title: const Text("Mes Listes")),
       body: ListView(
         children: [
+          // Default lists
           _buildMovieList(context, "🌟 À voir", movieProvider.favoriteMovies, "favorite"),
           _buildMovieList(context, "❤️ Likes", movieProvider.likedMovies, "like"),
           _buildMovieList(context, "💔 Dislikes", movieProvider.dislikedMovies, "dislike"),
           _buildMovieList(context, "✨ Superlikes", movieProvider.superLikedMovies, "superlike"),
           _buildMovieList(context, "📌 Unseen", movieProvider.unseenMovies, "unseen"),
+          
+          // Custom lists
+          if (movieProvider.customLists.isNotEmpty)
+            const Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Text("Mes Listes Personnalisées", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.blueGrey)),
+            ),
+          ...movieProvider.customLists.entries.map((entry) {
+            return _buildMovieList(context, "📁 ${entry.key}", entry.value, entry.key, isCustom: true);
+          }).toList(),
         ],
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () => _showCreateListDialog(context, movieProvider),
+        icon: const Icon(Icons.add),
+        label: const Text("Créer une liste"),
+        backgroundColor: Colors.blue,
       ),
     );
   }
 
-  Widget _buildMovieList(BuildContext context, String title, List<Map<String, dynamic>> movies, String currentKey) {
+  void _showCreateListDialog(BuildContext context, MovieProvider provider) {
+    final TextEditingController controller = TextEditingController();
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("Nouvelle Liste"),
+          content: TextField(
+            controller: controller,
+            decoration: const InputDecoration(hintText: "Nom de la liste (ex: Films d'horreur)"),
+            autofocus: true,
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("Annuler"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                final name = controller.text.trim();
+                if (name.isNotEmpty) {
+                  provider.createCustomList(name);
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Liste '$name' créée !")));
+                }
+              },
+              child: const Text("Créer"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildMovieList(BuildContext context, String title, List<Map<String, dynamic>> movies, String currentKey, {bool isCustom = false}) {
     return ExpansionTile(
       initiallyExpanded: currentKey == initialType,
-      title: Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              IconButton(
+                icon: const Icon(Icons.share, size: 20, color: Colors.blue),
+                onPressed: () => _shareList(title, movies),
+              ),
+              if (isCustom)
+                IconButton(
+                  icon: const Icon(Icons.delete, size: 20, color: Colors.red),
+                  onPressed: () {
+                    showDialog(context: context, builder: (context) => AlertDialog(
+                      title: const Text("Supprimer la liste"),
+                      content: Text("Voulez-vous vraiment supprimer la liste '$title' ?"),
+                      actions: [
+                        TextButton(onPressed: () => Navigator.pop(context), child: const Text("Annuler")),
+                        TextButton(
+                          onPressed: () {
+                            Provider.of<MovieProvider>(context, listen: false).deleteCustomList(currentKey);
+                            Navigator.pop(context);
+                          }, 
+                          child: const Text("Supprimer", style: TextStyle(color: Colors.red))
+                        ),
+                      ]
+                    ));
+                  },
+                ),
+            ],
+          )
+        ],
+      ),
       children: movies.map((movie) {
         return ListTile(
           onTap: () {
@@ -63,6 +149,8 @@ class ListsScreen extends StatelessWidget {
               } else if (action == 'watch') {
                  // Open Streaming Link Logic
                  _launchWatchLink(context, movie);
+              } else if (action == 'share') {
+                 _shareMovie(movie);
               } else {
                 provider.moveMovie(movie, currentKey, action);
                 ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Film déplacé !")));
@@ -83,7 +171,8 @@ class ListsScreen extends StatelessWidget {
                  )
                ));
                options.add(const PopupMenuDivider());
-
+               
+               // Options standards
                if (currentKey != 'favorite') {
                  options.add(const PopupMenuItem(value: 'favorite', child: Text('Déplacer vers 🌟 À voir')));
                }
@@ -99,7 +188,17 @@ class ListsScreen extends StatelessWidget {
                if (currentKey != 'unseen') {
                  options.add(const PopupMenuItem(value: 'unseen', child: Text('Déplacer vers 📌 Unseen')));
                }
+               
+               // Options listes persos
+               final provider = Provider.of<MovieProvider>(context, listen: false);
+               for (var listName in provider.customLists.keys) {
+                 if (currentKey != listName) {
+                    options.add(PopupMenuItem(value: listName, child: Text('Déplacer vers 📁 $listName')));
+                 }
+               }
+
                options.add(const PopupMenuDivider());
+               options.add(const PopupMenuItem(value: 'share', child: Text('Partager 🔗', style: TextStyle(color: Colors.blue))));
                options.add(const PopupMenuItem(value: 'delete', child: Text('Supprimer 🗑️', style: TextStyle(color: Colors.red))));
                
                return options;
@@ -132,5 +231,32 @@ class ListsScreen extends StatelessWidget {
     if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Impossible d\'ouvrir le lien')));
     }
+  }
+
+  void _shareList(String title, List<Map<String, dynamic>> movies) {
+    if (movies.isEmpty) {
+      Share.share("La liste $title est complètement vide !");
+      return;
+    }
+    
+    String shareText = '🎬 Voici ma liste "$title" sur SwipeWatch :\n\n';
+    for (var i = 0; i < movies.length; i++) {
+       final movie = movies[i];
+       final titleFilm = movie['title'] ?? movie['name'] ?? 'Inconnu';
+       final note = movie['vote_average']?.toString() ?? 'N/A';
+       shareText += '${i+1}. $titleFilm (⭐ $note/10)\n';
+    }
+    shareText += '\nRegarde vite ça ! 👀';
+    
+    Share.share(shareText);
+  }
+
+  void _shareMovie(Map<String, dynamic> movie) {
+    final title = movie['title'] ?? movie['name'] ?? 'Inconnu';
+    final id = movie['id'];
+    final isTv = movie.containsKey('name');
+    final tmdbLink = 'https://www.themoviedb.org/${isTv ? 'tv' : 'movie'}/$id';
+    
+    Share.share('🍿 Je te conseille de regarder "$title" !\n\nPlus d\'infos ici : $tmdbLink');
   }
 }

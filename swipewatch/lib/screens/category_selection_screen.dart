@@ -11,9 +11,11 @@ class CategorySelectionScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: const Color(0xFF121212), // Fond sombre premium
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
+      body: SafeArea(
+        child: Center(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -48,7 +50,7 @@ class CategorySelectionScreen extends StatelessWidget {
                     context,
                     "Films",
                     Icons.movie_outlined,
-                    [const Color(0xFF4c669f), const Color(0xFF3b5998)], // Standard Blue
+                    [const Color(0xFFFBE8A6), const Color(0xFFEBC17B)], // Golden Sand to Honey
                     () => Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -63,7 +65,7 @@ class CategorySelectionScreen extends StatelessWidget {
                     context,
                     "Séries",
                     Icons.tv,
-                    [const Color(0xFF192f6a), const Color(0xFF3b5998)], // Dark Blue
+                    [const Color(0xFFEBC17B), const Color(0xFFD49A5A)], // Honey to Caramel
                     () => Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -78,7 +80,7 @@ class CategorySelectionScreen extends StatelessWidget {
                     context,
                     "Animes",
                     Icons.whatshot, 
-                    [const Color(0xFF00c6ff), const Color(0xFF0072ff)], // Bright Blue (Ice/Tech)
+                    [const Color(0xFFD49A5A), const Color(0xFFB5733A)], // Caramel to Cinnamon
                     () => Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -93,7 +95,7 @@ class CategorySelectionScreen extends StatelessWidget {
                     context,
                     "Animation",
                     Icons.auto_awesome,
-                    [const Color(0xFF1CB5E0), const Color(0xFF000851)], // Deep Ocean Blue
+                    [const Color(0xFFB5733A), const Color(0xFF8E5122)], // Cinnamon to Chestnut
                     () => Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -104,10 +106,27 @@ class CategorySelectionScreen extends StatelessWidget {
                       ),
                     ),
                   ),
+                  _buildCategoryCard(
+                    context,
+                    "À l'affiche",
+                    Icons.local_movies_outlined,
+                    [const Color(0xFF8E5122), const Color(0xFF5E3211)], // Chestnut to Dark Walnut
+                    () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => HomeScreen(
+                          title: "À l'affiche",
+                          fetchFunction: api.getNowPlayingMovies,
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ],
           ),
+        ),
+        ),
         ),
       ),
     );

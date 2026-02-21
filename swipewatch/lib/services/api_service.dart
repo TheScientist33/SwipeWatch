@@ -61,6 +61,11 @@ class ApiService {
     });
   }
 
+  // 5. Films actuellement au cinéma (À l'affiche)
+  Future<List<Map<String, dynamic>>> getNowPlayingMovies({int page = 1}) async {
+    return _get('/movie/now_playing', page: page);
+  }
+
   // Recherche textuelle
   Future<List<Map<String, dynamic>>> searchContent(String query) async {
     return _get('/search/multi', params: {'query': query});

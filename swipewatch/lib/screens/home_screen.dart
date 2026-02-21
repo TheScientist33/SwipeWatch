@@ -4,6 +4,7 @@ import 'package:swipewatch/services/api_service.dart'; // Changed from data_serv
 import 'package:swipewatch/providers/movie_provider.dart';
 import 'package:swipewatch/widgets/swiper.dart';
 import 'package:swipewatch/screens/lists_screen.dart';
+import 'package:swipewatch/delegates/movie_search_delegate.dart';
 
 class HomeScreen extends StatefulWidget {
   final String title;
@@ -81,6 +82,15 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: Text(widget.title),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.search),
+            onPressed: () {
+              showSearch(
+                context: context,
+                delegate: MovieSearchDelegate(),
+              );
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.list),
             onPressed: () {

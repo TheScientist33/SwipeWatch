@@ -7,8 +7,12 @@ class MovieProvider with ChangeNotifier {
   List<Map<String, dynamic>> unseenMovies = [];
   List<Map<String, dynamic>> favoriteMovies = [];
 
+  // Custom dynamically created lists Mapping (ListName -> Movies)
+  Map<String, List<Map<String, dynamic>>> customLists = {};
+
   // Fonction pour vérifier si un film est déjà dans la liste
   bool isMovieInList(List<Map<String, dynamic>> list, Map<String, dynamic> movie) {
+    if (movie['id'] == null) return false;
     return list.any((m) => m['id'] == movie['id']);
   }
 
@@ -29,24 +33,34 @@ class MovieProvider with ChangeNotifier {
       case "favorite":
         if (!isMovieInList(favoriteMovies, movie)) favoriteMovies.add(movie);
         break;
+      default:
+        // Handle custom lists
+        if (customLists.containsKey(action)) {
+           if (!isMovieInList(customLists[action]!, movie)) {
+             customLists[action]!.add(movie);
+           }
+        } else {
+           print("Warning: Attempted to add to a list that does not exist: $action");
+        }
+        break;
     }
     notifyListeners();
   }
 
   // Helper pour récupérer la bonne liste selon le type
-  List<Map<String, dynamic>> _getListByType(String type) {
+  List<Map<String, dynamic>> getListByType(String type) {
     switch (type) {
       case "like": return likedMovies;
       case "dislike": return dislikedMovies;
       case "superlike": return superLikedMovies;
       case "unseen": return unseenMovies;
       case "favorite": return favoriteMovies;
-      default: return [];
+      default: return customLists[type] ?? [];
     }
   }
 
   void removeFromList(Map<String, dynamic> movie, String type) {
-    final list = _getListByType(type);
+    final list = getListByType(type);
     list.removeWhere((m) => m['id'] == movie['id']);
     notifyListeners();
   }
@@ -54,5 +68,20 @@ class MovieProvider with ChangeNotifier {
   void moveMovie(Map<String, dynamic> movie, String oldType, String newType) {
     removeFromList(movie, oldType);
     addMovie(movie, newType);
+  }
+
+  // --- CUSTOM LISTS MANAGEMENT ---
+  void createCustomList(String listName) {
+    if (listName.isNotEmpty && !customLists.containsKey(listName)) {
+      customLists[listName] = [];
+      notifyListeners();
+    }
+  }
+
+  void deleteCustomList(String listName) {
+    if (customLists.containsKey(listName)) {
+      customLists.remove(listName);
+      notifyListeners();
+    }
   }
 }
